@@ -1,12 +1,18 @@
 from socket import socket, AF_INET, SOCK_STREAM
 import json
 import argparse
+import logging
+import log.server_log_config
+
+logger = logging.getLogger('server')
 
 
 def get_client_msg(chat_client):
     client_json_msg = chat_client.recv(640).decode('utf-8')
-    print(f'Сообщение принято сервером от {chat_client}')
+    logger.info(f'Сообщение принято сервером от {chat_client}')
+    # print(f'Сообщение принято сервером от {chat_client}')
     return client_json_msg
+
 
 # TODO добавить проверку на вводимые данные клиента и добавить тесты
 def make_response_to_client(client_json_msg):
@@ -17,6 +23,7 @@ def make_response_to_client(client_json_msg):
             'alert': 'ok'
         }
         server_json_response = json.dumps(server_response_data)
+        logger.info('Сформирован ответ клиенту')
         return server_json_response
     else:
         server_response_data = {
@@ -24,16 +31,19 @@ def make_response_to_client(client_json_msg):
             'alert': 'bad request'
         }
         server_json_response = json.dumps(server_response_data)
+        logger.info('Сформирован ответ клиенту')
         return server_json_response
 
 
 def send_response_to_client(chat_client, server_json_response):
     chat_client.send(server_json_response.encode('utf-8'))
-    print(f'Ответ сервера отправлен клиенту {chat_client}')
+    logger.info(f'Ответ сервера отправлен клиенту {chat_client}')
+    # print(f'Ответ сервера отправлен клиенту {chat_client}')
 
 
 # TODO Добавить проверку порта > 1024
 def main():
+
     parser = argparse.ArgumentParser(description='Chat Server Terminal\' Launcher')
     parser.add_argument('-p', default=7777, type=int, help='Chat server port number, default 7777')
     parser.add_argument('-a', default='', type=str, help='IP-address for listening, default is any')

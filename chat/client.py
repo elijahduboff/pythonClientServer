@@ -2,11 +2,16 @@ import time
 import json
 from socket import socket, AF_INET, SOCK_STREAM
 import argparse
+import logging
+import log.client_log_config
+
+logger = logging.getLogger('client')
 
 
 def get_server_response(server):
     """ Функция принимает на вход сокет сервера, получает сообщение, декодирует его в UTF-8 и возвращает Json"""
     server_json_response = server.recv(640).decode('utf-8')
+    logger.info(f'Получен ответ сервера {server}')
     return server_json_response
 
 
@@ -22,6 +27,7 @@ def make_presence_msg():
         }
     }
     presence_json_msg = json.dumps(presence_msg_data)
+    logger.info('Сформировано сообщение о присутствии')
     return presence_json_msg
 
 
@@ -29,13 +35,15 @@ def send_msg_to_server(server, json_msg):
     """ Функция принимает на вход сокет сервера, подготовленное сообщение в Json, кодирует сообщение
     и отправляет серверу"""
     server.send(json_msg.encode('utf-8'))
-    print('Сообщение отправлено')
+    logger.info('Сообщение отправлено')
+    # print('Сообщение отправлено')
 
 
 def get_data_from_msg(server_response_msg):
     """ Функция принимает на вход ответ сервера в Json, обрабатывает его и возвращает данные в словаре"""
     server_response_data = json.loads(server_response_msg)
-    print(f'Ответ сервера {server_response_data}')
+    logger.info(f'Ответ сервера {server_response_data}')
+    # print(f'Ответ сервера {server_response_data}')
     return server_response_data
 
 

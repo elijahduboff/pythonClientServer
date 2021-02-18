@@ -1,8 +1,7 @@
 import json
 import unittest
-import time
 
-from chat.client import make_presence_msg, get_server_response, send_msg_to_server, get_data_from_msg
+from chat.client import make_presence_msg
 from chat.server import get_client_msg, make_response_to_client, send_response_to_client
 
 
@@ -54,7 +53,6 @@ class TestServer(unittest.TestCase):
         test_socket = TestSocket(response_json)
         send_response_to_client(test_socket, response_json)
         self.assertEqual(test_socket.encoded_msg, test_socket.received_msg)
-
 
 
 if __name__ == '__main__':
