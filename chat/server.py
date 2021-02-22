@@ -3,10 +3,13 @@ import json
 import argparse
 import logging
 import log.server_log_config
+from log.server_log_config import Log, log_func
 
 logger = logging.getLogger('server')
 
 
+# @Log()
+@log_func
 def get_client_msg(chat_client):
     client_json_msg = chat_client.recv(640).decode('utf-8')
     logger.info(f'Сообщение принято сервером от {chat_client}')
@@ -15,6 +18,8 @@ def get_client_msg(chat_client):
 
 
 # TODO добавить проверку на вводимые данные клиента и добавить тесты
+# @Log()
+@log_func
 def make_response_to_client(client_json_msg):
     client_msg_data = json.loads(client_json_msg)
     if client_msg_data:
@@ -35,6 +40,8 @@ def make_response_to_client(client_json_msg):
         return server_json_response
 
 
+# @Log()
+@log_func
 def send_response_to_client(chat_client, server_json_response):
     chat_client.send(server_json_response.encode('utf-8'))
     logger.info(f'Ответ сервера отправлен клиенту {chat_client}')
@@ -43,7 +50,6 @@ def send_response_to_client(chat_client, server_json_response):
 
 # TODO Добавить проверку порта > 1024
 def main():
-
     parser = argparse.ArgumentParser(description='Chat Server Terminal\' Launcher')
     parser.add_argument('-p', default=7777, type=int, help='Chat server port number, default 7777')
     parser.add_argument('-a', default='', type=str, help='IP-address for listening, default is any')
