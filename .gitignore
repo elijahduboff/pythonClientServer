@@ -1,3 +1,6 @@
 /venv/pyvenv.cfg
 /venv/
 /.idea/
+chat/__pycache__/
+chat/log/__pycache__/
+chat/log/logs/
