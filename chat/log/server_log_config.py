@@ -1,3 +1,4 @@
+import inspect
 import logging
 import os
 from logging import handlers
@@ -14,4 +15,24 @@ logging.basicConfig(
 logger = logging.getLogger('server')
 logger.addHandler(handlers.TimedRotatingFileHandler(filename=log_file, when='d', interval=1))
 
+
+class Log:
+    def __init__(self):
+        pass
+
+    def __call__(self, func):
+        def decorator(*args, **kwargs):
+            frame = inspect.currentframe().f_back
+            logger.info(f'Вызываем функцию {func} c параметрами {args} {kwargs} из функции {frame.f_code.co_name}')
+            return func(*args, **kwargs)
+
+        return decorator
+
+
+def log_func(func):
+    def wrapper(*args,**kwargs):
+        frame = inspect.currentframe().f_back
+        logger.info(f'Вызываем функцию {func} с параметрами {args} {kwargs} из функции {frame.f_code.co_name}')
+        return func(*args, **kwargs)
+    return wrapper
 

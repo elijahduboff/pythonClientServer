@@ -4,10 +4,13 @@ from socket import socket, AF_INET, SOCK_STREAM
 import argparse
 import logging
 import log.client_log_config
+from log.client_log_config import Log, log_func
 
 logger = logging.getLogger('client')
 
 
+# @Log()
+@log_func
 def get_server_response(server):
     """ Функция принимает на вход сокет сервера, получает сообщение, декодирует его в UTF-8 и возвращает Json"""
     server_json_response = server.recv(640).decode('utf-8')
@@ -15,6 +18,8 @@ def get_server_response(server):
     return server_json_response
 
 
+# @Log()
+@log_func
 def make_presence_msg():
     """ Функция формирует presense сообщение клиента и возвращает json объект с сообщением"""
     presence_msg_data = {
@@ -31,6 +36,8 @@ def make_presence_msg():
     return presence_json_msg
 
 
+# @Log()
+@log_func
 def send_msg_to_server(server, json_msg):
     """ Функция принимает на вход сокет сервера, подготовленное сообщение в Json, кодирует сообщение
     и отправляет серверу"""
@@ -39,6 +46,8 @@ def send_msg_to_server(server, json_msg):
     # print('Сообщение отправлено')
 
 
+# @Log()
+@log_func
 def get_data_from_msg(server_response_msg):
     """ Функция принимает на вход ответ сервера в Json, обрабатывает его и возвращает данные в словаре"""
     server_response_data = json.loads(server_response_msg)
